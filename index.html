@@ -31,6 +31,10 @@
     animation: bounce 0.15s infinite;
   }
 
+  .selected {
+    border: 1px solid red;
+  }
+
   @keyframes bounce {
     0% {
       transform: scaleX(100%) scaleY(100%);
@@ -44,25 +48,27 @@
   }
 </style>
 <script>
+  function select(num) {
+    document.getElementById("dino").src = num + ".png";
+    document.querySelector("#thumbnails > .selected")?.classList?.remove("selected")
+    document.querySelector(".thumbnail-" + num)?.classList?.add("selected")
+  }
   window.onload = function() {
-    console.log('loaded')
     // set the image to 1.png
-    document.getElementById("dino").src = "1.png";
+    select(1)
 
     // the user can press number keys to set the image. Pressing "1" sets the image to "1.png", etc.
-    // pressing the number with shift held down sets the image to reverse by setting the class "reverse"
     document.addEventListener("keydown", function(event) {
       // all numeric keys allowed
       if (event.keyCode >= 48 && event.keyCode <= 57) {
         // get the key number
-        var num = event.keyCode - 48;
-        // set the image
-        document.getElementById("dino").src = num + ".png";
+        const num = event.keyCode - 48;
+
+        select(num)
       }
 
       // on any keypress, give the image a little shakey bounce
       // but if shift is held down, keep the bounce going
-      console.log({event})
       if (event.shiftKey) {
         document.getElementById("dino").classList.add("bounce")
       } else {
@@ -74,21 +80,19 @@
     })
     // each image is listed in a thumbnail at the top of the page
     for (var i = 1; i <= 9; i++) {
-      console.log({i})
       // create a new image element
       const img = document.createElement("img");
       // set the source
       img.src = i + ".png";
       // set the class
       img.classList.add("thumbnail");
+      img.classList.add(`thumbnail-${i}`)
+      img.dataset.num = i;
       // add the image to the page
       document.querySelector('#thumbnails').appendChild(img);
       // add an event listener to the image
       img.addEventListener("click", function(event) {
-        // set the image to the source of the clicked image
-        document.getElementById("dino").src = event.target.src;
-        // remove the class "reverse"
-        document.getElementById("dino").classList.remove("reverse")
+        select(event.target.dataset.num)
       })
     }
   }
