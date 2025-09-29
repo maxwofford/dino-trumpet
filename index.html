@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
 
 <style>
@@ -67,11 +68,21 @@
         select(num)
       }
 
+      // flip the page with "r"
+      if (event.key === "r") {
+        document.getElementById("dino-container").classList.toggle("reverse")
+
+        document.getElementById("dino").classList.add("bounce")
+        setTimeout(function() {
+          document.getElementById("dino").classList.remove("bounce")
+        }, 150)
+      }
+
       // on any keypress, give the image a little shakey bounce
       // but if shift is held down, keep the bounce going
       if (event.shiftKey) {
         document.getElementById("dino").classList.add("bounce")
-      } else {
+      } else if (event.keyCode >= 48 && event.keyCode <= 57) {
         document.getElementById("dino").classList.add("bounce")
         setTimeout(function() {
           document.getElementById("dino").classList.remove("bounce")
@@ -100,6 +111,34 @@
 </script>
 </head>
 <body>
-<div id="thumbnails"></div>
-<img src="#" alt="dinosaur" id="dino">
+  <style>
+    .help-text.enabled > .help-short ,
+      .help-text > .help-long {
+      display: none;
+    }
+    .help-text > .help-short ,
+      .help-text.enabled > .help-long {
+      display: inline;
+      opacity: 0.5;
+    }
+  </style>
+  <script>
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "h") {
+        document.querySelector(".help-text").classList.toggle("enabled")
+      }
+    })
+  </script>
+  <div class="help-text">
+    <span class="help-short">
+      h - help
+    </span>
+    <span class="help-long">
+      h - help | 1-9 - frame | shift - bounce | r - reverse
+    </span>
+  </div>
+  <div id="thumbnails"></div>
+  <div id="dino-container">
+    <img src="#" alt="dinosaur" id="dino">
+  </div>
 </body>
